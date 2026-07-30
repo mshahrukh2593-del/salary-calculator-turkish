@@ -9,7 +9,7 @@
 <meta content="#39a844" name="theme-color"/>
 <link href="apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
 <link href="apple-touch-icon.png" rel="icon" sizes="180x180" type="image/png"/>
-<title>Bütçem v8.9</title>
+<title>Bütçem v9.1</title>
 <style>:root {
       color-scheme: light dark;
       --bg: #f2f4f7;
@@ -1084,7 +1084,7 @@
       background: var(--surface);
     }
 
-    .month-picker input[type="month"] {
+    .month-picker #monthInput {
       min-width: 0;
       width: 100%;
       min-height: 44px;
@@ -1100,7 +1100,7 @@
       -webkit-appearance: none;
     }
 
-    .month-picker input[type="month"]:focus {
+    .month-picker #monthInput:focus {
       border: 0;
       outline: none;
       box-shadow: inset 0 0 0 2px var(--primary);
@@ -1141,7 +1141,7 @@
         grid-template-columns: 42px minmax(0, 1fr) 42px;
       }
 
-      .month-picker input[type="month"],
+      .month-picker #monthInput,
       .month-nav-button {
         min-height: 42px;
       }
@@ -2175,7 +2175,7 @@ dialog::backdrop {
     font-size: 11px;
   }
 }
-</style><meta content="8.9" name="application-version"/></head>
+</style><meta content="9.1" name="application-version"/></head>
 <body>
 <main class="app">
 <header class="topbar">
@@ -2190,7 +2190,7 @@ dialog::backdrop {
 <label for="monthInput">Seçilen ay</label>
 <div class="month-picker">
 <button aria-label="Önceki ay" class="month-nav-button" id="previousMonthButton" type="button">‹</button>
-<input id="monthInput" type="month"/>
+<select aria-label="Ay seçin" id="monthInput"/>
 <button aria-label="Sonraki ay" class="month-nav-button" id="nextMonthButton" type="button">›</button>
 </div>
 <div class="currency-setting">
@@ -2209,7 +2209,7 @@ dialog::backdrop {
 <p class="inline-note">Her ay ayrı kaydedilir. Aylar arasında geçiş yapmak hiçbir veriyi silmez.</p>
 </section>
 <section class="card">
-<h2>Genel Bakış — <span id="monthTitle"></span></h2>
+<h2>Genel Durum — <span id="monthTitle"></span></h2>
 <div class="dashboard-hero">
 <div aria-label="Kalan bütçe" class="budget-ring" id="budgetRing" role="img">
 <div class="budget-ring-content">
@@ -2219,7 +2219,7 @@ dialog::backdrop {
 </div>
 </div>
 <div class="daily-allowance compact-allowance">
-<span class="daily-allowance-label">Günlük güvenli harcama</span>
+<span class="daily-allowance-label">Bugün Güvenle Harcayabileceğiniz</span>
 <span class="daily-allowance-value" id="dailyAllowanceDisplay">€0.00</span>
 <span class="daily-allowance-note" id="dailyAllowanceNote">Bu ayda kalan günlere göre</span>
 </div>
@@ -2242,7 +2242,7 @@ dialog::backdrop {
 </div>
 <div class="metric metric-spent">
 <div class="metric-card-head">
-<span class="metric-label">Harcanan</span>
+<span class="metric-label">Toplam Harcama</span>
 <span aria-hidden="true" class="metric-card-icon">
 <svg viewbox="0 0 24 24">
 <rect height="14" rx="2" width="17" x="3.5" y="5"></rect>
@@ -2267,11 +2267,11 @@ dialog::backdrop {
 </span>
 </div>
 <span class="metric-value" id="expenseCountDisplay">0</span>
-<span class="metric-support">Kaydedilen işlemler</span>
+<span class="metric-support">Toplam İşlem</span>
 </div>
 <div class="metric metric-days">
 <div class="metric-card-head">
-<span class="metric-label">Kalan gün</span>
+<span class="metric-label">Kalan Gün</span>
 <span aria-hidden="true" class="metric-card-icon">
 <svg viewbox="0 0 24 24">
 <rect height="15" rx="2" width="17" x="3.5" y="5.5"></rect>
@@ -2289,11 +2289,11 @@ dialog::backdrop {
 </div>
 <div class="category-section">
 <div class="category-section-head">
-<h3>Kategoriye göre harcama</h3>
+<h3>Kategori Dağılımı</h3>
 <span id="categoryChartSubtitle">Henüz gider yok</span>
 </div>
 <div class="category-chart-layout">
-<div aria-label="Kategoriye göre harcama" class="category-ring" id="categoryRing" role="img">
+<div aria-label="Kategori Dağılımı" class="category-ring" id="categoryRing" role="img">
 <div class="category-ring-center">
 <strong id="categoryRingTotal">€0.00</strong>
 <span>harcandı</span>
@@ -2344,10 +2344,10 @@ dialog::backdrop {
 <section class="card no-print">
 <h2>Aylık araçlar</h2>
 <div class="button-row two">
-<button class="btn soft-primary" id="copyRecurringButton" type="button">Tekrarlanan giderleri kopyala</button>
+<button class="btn soft-primary" id="copyRecurringButton" type="button">Aylık Tekrarlanan Giderleri kopyala</button>
 <button class="btn soft-danger" id="clearMonthButton" type="button">Bu ayı sil</button>
 </div>
-<p class="inline-note">“Tekrarlanan giderleri kopyala” seçeneği, önceki aydaki tekrarlanan kayıtları seçilen aya kopyalar.</p>
+<p class="inline-note">“Aylık Tekrarlanan Giderleri kopyala” seçeneği, önceki aydaki tekrarlanan kayıtları seçilen aya kopyalar.</p>
 </section>
 </main>
 <button aria-label="Gider ekle" class="fab no-print" id="addExpenseFab" type="button">+</button>
@@ -2376,7 +2376,7 @@ dialog::backdrop {
 <option value="Bills">Faturalar</option>
 <option value="Groceries">Market</option>
 <option value="Transport">Ulaşım</option>
-<option value="Dining">Yeme İçme</option>
+<option value="Dining">Yeme &amp; İçme</option>
 <option value="Entertainment">Eğlence</option>
 <option value="Shopping">Alışveriş</option>
 <option value="Health">Sağlık</option>
@@ -2385,7 +2385,7 @@ dialog::backdrop {
 <option value="Savings">Birikim</option>
 <option value="Other">Diğer</option>
 </select>
-<label for="expenseNoteInput">Notlar (isteğe bağlı)</label>
+<label for="expenseNoteInput">Not (İsteğe Bağlı)</label>
 <textarea id="expenseNoteInput" maxlength="500" placeholder="For example, Includes electricity"></textarea>
 <div class="checkbox-row">
 <input id="expenseRecurringInput" type="checkbox"/>
@@ -2393,7 +2393,7 @@ dialog::backdrop {
 </div>
 <div class="checkbox-row">
 <input id="expensePinnedInput" type="checkbox"/>
-<label for="expensePinnedInput">Bu gideri en üste sabitle</label>
+<label for="expensePinnedInput">Bu Gideri Üste Sabitle</label>
 </div>
 <div class="button-row two">
 <button class="btn" id="saveExpenseButton" type="button">Gider ekle</button>
@@ -2409,11 +2409,11 @@ dialog::backdrop {
 <button aria-label="Kapat" class="icon-button" id="closeToolsDialogButton" type="button">×</button>
 </div>
 <div class="button-row">
-<button class="btn" id="exportCsvButton" type="button">CSV olarak dışa aktar</button>
-<button class="btn success" id="exportExcelButton" type="button">Excel uyumlu dosya olarak dışa aktar</button>
-<button class="btn secondary" id="printPdfButton" type="button">Yazdır veya PDF olarak kaydet</button>
-<button class="btn secondary" id="exportBackupButton" type="button">Tam yedeği dışa aktar</button>
-<button class="btn secondary" id="importBackupButton" type="button">Tam yedeği içe aktar</button>
+<button class="btn" id="exportCsvButton" type="button">CSV Dışa Aktar</button>
+<button class="btn success" id="exportExcelButton" type="button">Excel Dışa Aktar</button>
+<button class="btn secondary" id="printPdfButton" type="button">PDF Olarak Kaydet</button>
+<button class="btn secondary" id="exportBackupButton" type="button">Yedeği Dışa Aktar</button>
+<button class="btn secondary" id="importBackupButton" type="button">Yedeği İçe Aktar</button>
 </div>
 <input accept=".json,application/json" class="hidden" id="backupFileInput" type="file"/>
 <p class="inline-note">
@@ -2445,7 +2445,7 @@ dialog::backdrop {
       Bills: "Faturalar",
       Groceries: "Market",
       Transport: "Ulaşım",
-      Dining: "Yeme İçme",
+      Dining: "Yeme & İçme",
       Entertainment: "Eğlence",
       Shopping: "Alışveriş",
       Health: "Sağlık",
@@ -2681,10 +2681,37 @@ dialog::backdrop {
       }).format(Number(value) || 0);
     }
 
+    const TURKISH_MONTHS = [
+      "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
+      "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"
+    ];
+
     function formatMonth(key) {
       const [year, month] = key.split("-").map(Number);
-      return new Intl.DateTimeFormat(LOCALE, { month: "long", year: "numeric" })
-        .format(new Date(year, month - 1, 1));
+      return `${TURKISH_MONTHS[month - 1]} ${year}`;
+    }
+
+    function populateMonthOptions() {
+      const currentYear = new Date().getFullYear();
+      const selectedYear = Number(selectedMonth.split("-")[0]);
+      const startYear = Math.min(currentYear - 5, selectedYear - 1);
+      const endYear = Math.max(currentYear + 5, selectedYear + 1);
+
+      monthInput.innerHTML = "";
+
+      for (let year = endYear; year >= startYear; year -= 1) {
+        const group = document.createElement("optgroup");
+        group.label = String(year);
+
+        for (let month = 12; month >= 1; month -= 1) {
+          const option = document.createElement("option");
+          option.value = `${year}-${String(month).padStart(2, "0")}`;
+          option.textContent = `${TURKISH_MONTHS[month - 1]} ${year}`;
+          group.appendChild(option);
+        }
+
+        monthInput.appendChild(group);
+      }
     }
 
     function formatDate(value) {
@@ -2797,6 +2824,7 @@ dialog::backdrop {
       const month = monthData();
       const t = totals(month);
 
+      populateMonthOptions();
       monthInput.value = selectedMonth;
       if (currencySelect) currencySelect.value = CURRENCY;
       $("monthTitle").textContent = formatMonth(selectedMonth);
@@ -2935,11 +2963,9 @@ dialog::backdrop {
 
             <div class="expense-row-actions">
               <button class="expense-text-action pin-action" type="button" data-action="pin">
-                ${e.pinned ? "Sabitlemeyi kaldır" : "Sabitle"}
+                ${e.pinned ? "Sabitlemeyi Kaldır" : "Sabitle"}
               </button>
-              <button class="expense-text-action delete-action" type="button" data-action="delete">
-                Delete
-              </button>
+              <button class="expense-text-action delete-action" type="button" data-action="delete">Sil</button>
             </div>
           </div>
         `;
