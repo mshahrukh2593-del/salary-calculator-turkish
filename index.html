@@ -9,7 +9,7 @@
 <meta content="#39a844" name="theme-color"/>
 <link href="apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
 <link href="apple-touch-icon.png" rel="icon" sizes="180x180" type="image/png"/>
-<title>Bütçem v9.1</title>
+<title>Bütçem v8.9</title>
 <style>:root {
       color-scheme: light dark;
       --bg: #f2f4f7;
@@ -1084,7 +1084,7 @@
       background: var(--surface);
     }
 
-    .month-picker #monthInput {
+    .month-picker input[type="month"] {
       min-width: 0;
       width: 100%;
       min-height: 44px;
@@ -1100,7 +1100,7 @@
       -webkit-appearance: none;
     }
 
-    .month-picker #monthInput:focus {
+    .month-picker input[type="month"]:focus {
       border: 0;
       outline: none;
       box-shadow: inset 0 0 0 2px var(--primary);
@@ -1141,7 +1141,7 @@
         grid-template-columns: 42px minmax(0, 1fr) 42px;
       }
 
-      .month-picker #monthInput,
+      .month-picker input[type="month"],
       .month-nav-button {
         min-height: 42px;
       }
@@ -2175,7 +2175,7 @@ dialog::backdrop {
     font-size: 11px;
   }
 }
-</style><meta content="9.1" name="application-version"/></head>
+</style><meta content="8.9" name="application-version"/></head>
 <body>
 <main class="app">
 <header class="topbar">
@@ -2190,7 +2190,7 @@ dialog::backdrop {
 <label for="monthInput">Seçilen ay</label>
 <div class="month-picker">
 <button aria-label="Önceki ay" class="month-nav-button" id="previousMonthButton" type="button">‹</button>
-<select aria-label="Ay seçin" id="monthInput"/>
+<input id="monthInput" type="month"/>
 <button aria-label="Sonraki ay" class="month-nav-button" id="nextMonthButton" type="button">›</button>
 </div>
 <div class="currency-setting">
@@ -2376,7 +2376,7 @@ dialog::backdrop {
 <option value="Bills">Faturalar</option>
 <option value="Groceries">Market</option>
 <option value="Transport">Ulaşım</option>
-<option value="Dining">Yeme &amp; İçme</option>
+<option value="Dining">Yeme & İçme</option>
 <option value="Entertainment">Eğlence</option>
 <option value="Shopping">Alışveriş</option>
 <option value="Health">Sağlık</option>
@@ -2681,37 +2681,10 @@ dialog::backdrop {
       }).format(Number(value) || 0);
     }
 
-    const TURKISH_MONTHS = [
-      "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
-      "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"
-    ];
-
     function formatMonth(key) {
       const [year, month] = key.split("-").map(Number);
-      return `${TURKISH_MONTHS[month - 1]} ${year}`;
-    }
-
-    function populateMonthOptions() {
-      const currentYear = new Date().getFullYear();
-      const selectedYear = Number(selectedMonth.split("-")[0]);
-      const startYear = Math.min(currentYear - 5, selectedYear - 1);
-      const endYear = Math.max(currentYear + 5, selectedYear + 1);
-
-      monthInput.innerHTML = "";
-
-      for (let year = endYear; year >= startYear; year -= 1) {
-        const group = document.createElement("optgroup");
-        group.label = String(year);
-
-        for (let month = 12; month >= 1; month -= 1) {
-          const option = document.createElement("option");
-          option.value = `${year}-${String(month).padStart(2, "0")}`;
-          option.textContent = `${TURKISH_MONTHS[month - 1]} ${year}`;
-          group.appendChild(option);
-        }
-
-        monthInput.appendChild(group);
-      }
+      return new Intl.DateTimeFormat(LOCALE, { month: "long", year: "numeric" })
+        .format(new Date(year, month - 1, 1));
     }
 
     function formatDate(value) {
@@ -2824,7 +2797,6 @@ dialog::backdrop {
       const month = monthData();
       const t = totals(month);
 
-      populateMonthOptions();
       monthInput.value = selectedMonth;
       if (currencySelect) currencySelect.value = CURRENCY;
       $("monthTitle").textContent = formatMonth(selectedMonth);
